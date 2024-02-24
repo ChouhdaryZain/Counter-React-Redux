@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useDispatch } from 'react-redux'
+import styles from './Controls.module.css'
 
 const Controls = () => {
 
   const dispatch = useDispatch();
+  const inputElement = useRef();
+
   const handleIncrement = () => {
     dispatch({ type: "INCREMENT" });
   }
@@ -12,14 +15,57 @@ const Controls = () => {
     dispatch({ type: "DECREMENT" });
   }
 
+  const handlePrivacy = () => {
+    dispatch({ type: "PRIVACY_TOGGLE" });
+  }
+
+  const handleAddNumber = () => {
+    dispatch({
+      type: "ADD_NUMBER", payload: {
+        num: inputElement.current.value,
+      }
+    });
+    inputElement.current.value = "";
+  }
+  const handleSubtractNumber = () => {
+    dispatch({
+      type: "SUBTRACT_NUMBER", payload: {
+        num: inputElement.current.value,
+      },
+    });
+    inputElement.current.value = "";
+  }
+
   return (
     <>
-      <button
-        onClick={handleIncrement}
-        type="button" className="btn btn-primary btn-lg px-4 gap-3">+1</button>
-      <button
-        onClick={handleDecrement}
-        type="button" className="btn btn-outline-secondary btn-lg px-4">-1</button>
+
+      <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
+        <button
+          onClick={handleIncrement}
+          type="button" className="btn btn-success btn-lg px-4 gap-3">+1</button>
+        <button
+          onClick={handleDecrement}
+          type="button" className="btn btn-danger btn-lg px-4">-1</button>
+        <button
+          onClick={handlePrivacy}
+          type="button" className="btn btn-warning btn-lg px-4">Privacy Toggle</button>
+      </div>
+
+      <div className={`d-grid gap-2 d-sm-flex justify-content-sm-center ${styles["AddSubtractNum"]}`}>
+        <input
+          ref={inputElement}
+          placeholder='Add number to add or subtract'
+          className={`${styles["input"]}`}
+        />
+      </div>
+      <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
+        <button
+          onClick={handleAddNumber}
+          type="button" className="btn btn-success btn-lg px-4 gap-3">Add</button>
+        <button
+          onClick={handleSubtractNumber}
+          type="button" className="btn btn-danger btn-lg px-4">Subtract</button>
+      </div>
     </>
   )
 }
